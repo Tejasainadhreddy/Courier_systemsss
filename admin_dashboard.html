@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Team_7 <span class="text-danger">Master Ledger</span></h2>
+        <div>
+            <a href="/admin-analytics" class="btn btn-outline-success fw-bold me-2">📊 Analytics</a>
+            <a href="/add-courier" class="btn btn-danger fw-bold shadow px-4">+ New Shipment</a>
+        </div>
+    </div>
+
+    <!-- Advanced Search -->
+    <form method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search by Tracking ID, Sender, Receiver or Status..." value="{{ search }}">
+            <button class="btn btn-outline-dark" type="submit">🔍 Search</button>
+        </div>
+    </form>
+
+    <div class="d-flex gap-3 mb-4">
+        <a href="/branches" class="btn btn-outline-dark fw-bold">📍 Branches</a>
+        <a href="/drivers" class="btn btn-outline-dark fw-bold">🚚 Drivers</a>
+        <a href="/create-admin" class="btn btn-outline-dark fw-bold">👤 Create New Admin</a>
+    </div>
+
+    <div class="row text-center mb-5 g-4">
+        <div class="col-md-6"><div class="card p-4 border-0 shadow-sm bg-white">Registered Users<br><h3 class="fw-bold text-primary">{{ u_count }}</h3></div></div>
+        <div class="col-md-6"><div class="card p-4 border-0 shadow-sm bg-white">Total Parcels<br><h3 class="fw-bold text-danger">{{ t_orders }}</h3></div></div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-0 overflow-hidden">
+        <table class="table table-hover align-middle mb-0 bg-white text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Tracking ID</th>
+                    <th>Route</th>
+                    <th>Logistics</th>
+                    <th>Cost</th>
+                    <th>Status</th>
+                    <th>Assigned Driver</th>
+                    <th width="180">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in couriers %}
+                <tr>
+                    <td class="fw-bold text-danger">{{ c.cons_no }}</td>
+                    <td class="small">{{ c.ship_name }} <i class="bi bi-arrow-right mx-2"></i> {{ c.rev_name }}</td>
+                    <td class="small">{{ c.weight }}kg | {{ c.p_type }}</td>
+                    <td class="fw-bold text-success">${{ "%.2f"|format(c.cost) }}</td>
+                    <td><span class="badge bg-light text-dark border">{{ c.est_delivery }}</span></td>
+                    <td><span class="badge bg-info">{{ c.assigned_driver }}</span></td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-dark dropdown-toggle rounded-pill px-4" type="button" data-bs-toggle="dropdown">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('update_status') }}?cons_no={{ c.cons_no }}">Update Status</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('assign_driver', cons_no=c.cons_no) }}">Assign Driver</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('track_details', cons_no=c.cons_no) }}">Full Tracking</a></li>
+                                <li><a class="dropdown-item text-success" href="{{ url_for('mark_delivered', cons_no=c.cons_no) }}">Mark as Delivered</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

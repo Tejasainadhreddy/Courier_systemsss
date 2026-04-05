@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg p-5 rounded-5 bg-white">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold text-dark">Request a Pickup</h3>
+                    <p class="text-muted small">We will collect the parcel from your registered address.</p>
+                </div>
+
+                <form action="/request-pickup" method="POST">
+                    <div class="row g-3">
+                        <!-- Sender Info (Auto-filled) -->
+                        <div class="col-12"><h5 class="fw-bold text-muted">Sender Information</h5></div>
+                        <div class="col-md-6">
+                            <label class="small fw-bold">Your Name</label>
+                            <input type="text" class="form-control bg-light border-0 py-2" value="{{ user.fullname }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small fw-bold">Your Phone</label>
+                            <input type="tel" class="form-control bg-light border-0 py-2" value="{{ user.phone }}" readonly>
+                        </div>
+
+                        <!-- Receiver -->
+                        <div class="col-12 mt-4"><h5 class="fw-bold text-muted">Receiver Information</h5></div>
+                        <div class="col-md-6">
+                            <label class="small fw-bold">Receiver Name</label>
+                            <input type="text" name="rev_name" class="form-control bg-light border-0 py-2" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small fw-bold">Receiver Phone</label>
+                            <input type="tel" name="receiver_phone" class="form-control bg-light border-0 py-2" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small fw-bold">Receiver Email</label>
+                            <input type="email" name="receiver_email" class="form-control bg-light border-0 py-2">
+                        </div>
+                        <div class="col-12">
+                            <label class="small fw-bold">Receiver Full Address</label>
+                            <textarea name="receiver_address" class="form-control bg-light border-0 py-2" rows="2" required></textarea>
+                        </div>
+
+                        <!-- Parcel Details -->
+                        <div class="col-12 mt-4"><h5 class="fw-bold text-muted">Parcel Details</h5></div>
+                        <div class="col-md-3">
+                            <label class="small fw-bold">Weight (kg)</label>
+                            <input type="number" step="0.1" name="weight" class="form-control bg-light border-0 py-2" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="small fw-bold">No. of Pieces</label>
+                            <input type="number" name="no_of_pieces" value="1" class="form-control bg-light border-0 py-2" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="small fw-bold">Package Type</label>
+                            <select name="p_type" class="form-select bg-light border-0 py-2">
+                                <option>Box</option>
+                                <option>Pallet</option>
+                                <option>Envelope</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="small fw-bold">Priority</label>
+                            <select name="priority" class="form-select bg-light border-0 py-2">
+                                <option>Standard</option>
+                                <option>Express</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="small fw-bold">Description of Contents</label>
+                            <input type="text" name="contents_description" class="form-control bg-light border-0 py-2">
+                        </div>
+                        <div class="col-12">
+                            <label class="small fw-bold">Special Instructions</label>
+                            <textarea name="special_instructions" class="form-control bg-light border-0 py-2" rows="2"></textarea>
+                        </div>
+
+                        <!-- Branch Selection -->
+                        <div class="col-12">
+                            <label class="small fw-bold">Preferred Branch / Hub</label>
+                            <select name="branch_id" class="form-select bg-light border-0 py-2">
+                                <option value="">Select Branch (Optional)</option>
+                                {% for b in branches %}
+                                <option value="{{ b.id }}">{{ b.name }} - {{ b.location }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger w-100 fw-bold py-3 mt-5 rounded-pill shadow">
+                        SUBMIT PICKUP REQUEST
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

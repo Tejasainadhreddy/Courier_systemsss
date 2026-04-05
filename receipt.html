@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="card border-0 shadow-lg mx-auto" style="max-width: 700px;">
+        <div class="card-header bg-danger text-white text-center py-4">
+            <h2 class="mb-0">TEAM<span class="fw-bold">_7</span> LOGISTICS</h2>
+            <p class="mb-0">Official Receipt • Tax Invoice</p>
+        </div>
+        <div class="card-body p-5">
+            <div class="d-flex justify-content-between mb-4">
+                <div>
+                    <strong>Tracking ID:</strong><br>
+                    <h4 class="text-danger">{{ courier.cons_no }}</h4>
+                </div>
+                <div class="text-end">
+                    <strong>Date:</strong><br>
+                    {{ courier.pick_date.strftime('%d %B %Y') }}
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-6">
+                    <strong>From (Sender):</strong><br>
+                    {{ courier.ship_name }}<br>
+                    <small>{{ courier.s_add }}</small>
+                </div>
+                <div class="col-6 text-end">
+                    <strong>To (Receiver):</strong><br>
+                    {{ courier.rev_name }}<br>
+                    <small>{{ courier.r_add }}</small>
+                </div>
+            </div>
+
+            <table class="table table-bordered">
+                <tr><td><strong>Base Fee</strong></td><td>$10.00</td></tr>
+                <tr><td><strong>Weight Charge ({{ courier.weight }} kg × $8/kg)</strong></td>
+                    <td>${{ (courier.weight * 8)|round(2) }}</td></tr>
+                <tr><td><strong>Priority Fee</strong></td>
+                    <td>${{ 15 if courier.priority == 'Express' else 0 }}</td></tr>
+                <tr class="table-danger"><td><strong>Total Amount</strong></td>
+                    <td><strong>${{ "%.2f"|format(courier.cost) }}</strong></td></tr>
+            </table>
+
+            <h6 class="fw-bold mt-4">Transit History</h6>
+            <ul class="list-group">
+                {% for t in tracks %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>{{ t.update_time.strftime('%d %b %Y %H:%M') }} — {{ t.status }}</span>
+                    <span class="text-muted">{{ t.current_city }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <div class="text-center mt-5">
+                <button onclick="window.print()" class="btn btn-dark btn-lg px-5 rounded-pill">
+                    🖨️ Print / Save as PDF
+                </button>
+            </div>
+            <p class="text-center text-muted small mt-3">Thank you for choosing Team_7 Logistics</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

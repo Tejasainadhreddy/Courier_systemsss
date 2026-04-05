@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container-fluid py-5" 
+     style="background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), 
+            url('https://images.unsplash.com/photo-1554224155-6726b9b2f5d8?auto=format&fit=crop&w=1920'); 
+            background-size: cover; 
+            background-position: center; 
+            min-height: 100vh; 
+            color: white;">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-md-9">
+                
+                <div class="card border-0 shadow-2xl rounded-5 overflow-hidden">
+                    <!-- Header -->
+                    <div class="card-header bg-white text-dark py-4 text-center border-bottom">
+                        <h3 class="fw-bold mb-0">
+                            <i class="bi bi-arrow-repeat text-primary me-2"></i>
+                            Update Shipment Status
+                        </h3>
+                    </div>
+
+                    <!-- Form Body -->
+                    <div class="card-body p-5 bg-white text-dark">
+                        <form action="/update-status" method="POST">
+                            
+                            <div class="mb-4">
+                                <label class="small fw-bold text-muted">Consignment Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
+                                    <input type="text" name="cons_no" class="form-control form-control-lg" value="{{ cons_no }}" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="small fw-bold text-muted">Current Location (City)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                    <input type="text" name="city" class="form-control form-control-lg" placeholder="e.g. Hayward Hub" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="small fw-bold text-muted">Update Status</label>
+                                <select name="status" id="status" class="form-select form-select-lg" required>
+                                    <option value="In Transit">In Transit</option>
+                                    <option value="Reached Hub">Reached Hub</option>
+                                    <option value="Out for Delivery">Out for Delivery</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Delayed">Delayed</option>
+                                </select>
+                            </div>
+
+                            <!-- Delay Reason -->
+                            <div id="delay-reason" class="mb-4" style="display: none;">
+                                <label class="small fw-bold text-muted">Reason for Delay</label>
+                                <select name="reason" class="form-select form-select-lg">
+                                    <option value="Weather is not good">Weather is not good</option>
+                                    <option value="Shortage in people">Shortage in people</option>
+                                    <option value="Traffic delay">Traffic delay</option>
+                                    <option value="Vehicle issue">Vehicle issue</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-5">
+                                <label class="small fw-bold text-muted">Additional Comments</label>
+                                <textarea name="comments" class="form-control" rows="4" placeholder="Any extra notes..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-lg w-100 fw-bold rounded-pill py-3">
+                                UPDATE SHIPMENT STATUS
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="card-footer bg-light text-center py-3">
+                        <a href="/admin_dashboard" class="text-muted small text-decoration-none">
+                            ← Back to Master Ledger
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('status').addEventListener('change', function() {
+        const reasonDiv = document.getElementById('delay-reason');
+        if (this.value === 'Delayed') {
+            reasonDiv.style.display = 'block';
+        } else {
+            reasonDiv.style.display = 'none';
+        }
+    });
+</script>
+
+{% endblock %}

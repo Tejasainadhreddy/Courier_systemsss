@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="card border-0 shadow-lg rounded-5">
+        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center px-5 py-4">
+            <h4 class="mb-0">📦 Tracking Details • {{ courier.cons_no }}</h4>
+            <a href="{{ url_for('user_dashboard') if session.role == 'user' else url_for('admin_dashboard') }}" 
+               class="btn btn-light btn-sm">← Back</a>
+        </div>
+        
+        <div class="card-body p-5">
+            
+            <!-- Sender & Receiver -->
+            <div class="row mb-5">
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-muted">FROM (Sender)</h6>
+                    <p class="fs-5 mb-1">{{ courier.ship_name }}</p>
+                    <p class="text-muted">{{ courier.s_add }}</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h6 class="fw-bold text-muted">TO (Receiver)</h6>
+                    <p class="fs-5 mb-1">{{ courier.rev_name }}</p>
+                    <p class="text-muted">{{ courier.r_add }}</p>
+                </div>
+            </div>
+
+            <!-- Status & Driver -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-muted">Current Status</h6>
+                    <span class="badge bg-warning fs-5 px-4 py-2">{{ courier.est_delivery }}</span>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h6 class="fw-bold text-muted">Assigned Driver</h6>
+                    <span class="badge bg-info fs-5 px-4 py-2">{{ driver_name }}</span>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Transit History -->
+            <h5 class="fw-bold mb-3 mt-4">Complete Transit History</h5>
+            
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                            <th>Location</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in tracks %}
+                        <tr>
+                            <td>{{ t.update_time.strftime('%d %b %Y, %H:%M') }}</td>
+                            <td><span class="badge bg-success">{{ t.status }}</span></td>
+                            <td>{{ t.current_city }}</td>
+                            <td>{{ t.comments or '—' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">No tracking updates yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
